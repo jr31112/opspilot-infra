@@ -1,0 +1,14 @@
+# Local credentials and generated files
+.env
+.env.*
+!*.env.example
+*.secret.yaml
+kubeconfig*
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+*.tfvars.json
+crash.log
+.DS_Store

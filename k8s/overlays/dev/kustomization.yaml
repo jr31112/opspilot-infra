@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: opspilot-dev
+resources:
+  - ../../base
+  - namespace.yaml
+images:
+  - name: opspilot
+    newName: docker.io/replace-with-dockerhub-username/opspilot
+    newTag: replace-with-sha-tag
+configMapGenerator:
+  - name: opspilot-config
+    literals:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SERVER_PORT=8080
+      - DB_PORT=3306
+      - DDL_AUTO=update
+      - FAULT_TESTS_ENABLED=false
+      - MANAGEMENT_ENDPOINT_HEALTH_GROUP_READINESS_INCLUDE=readinessState,db
+      - JAVA_TOOL_OPTIONS=-XX:MaxRAMPercentage=60.0
