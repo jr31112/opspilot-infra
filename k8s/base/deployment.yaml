@@ -21,6 +21,8 @@ spec:
           envFrom:
             - secretRef:
                 name: opspilot-db
+            - configMapRef:
+                name: opspilot-config
 
           resources:
             requests:
