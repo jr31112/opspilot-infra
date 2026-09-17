@@ -23,12 +23,17 @@ jobs:
 
           ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Deploy to K3s
+      - name: Update image
         env:
           IMAGE_TAG: ${{ github.event.client_payload.image_tag }}
         run: |
           ssh -i ~/.ssh/opspilot.pem \
             "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
             "sudo kubectl set image deployment/opspilot \
-             opspilot=${{ secrets.DOCKERHUB_USER }}/opspilot:${IMAGE_TAG} && \
-             sudo kubectl rollout status deployment/opspilot --timeout=120s"
+             opspilot=${{ secrets.DOCKERHUB_USER }}/opspilot:${IMAGE_TAG}"
+
+      - name: Wait for rollout
+        run: |
+          ssh -i ~/.ssh/opspilot.pem \
+            "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
+            "sudo kubectl rollout status deployment/opspilot --timeout=120s"
