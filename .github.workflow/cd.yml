@@ -1,0 +1,34 @@
+name: CD
+
+on:
+  repository_dispatch:
+    types: [deploy]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production  # 여기서 사용자 승인
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/opspilot.pem
+          chmod 600 ~/.ssh/opspilot.pem
+
+          ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy to K3s
+        env:
+          IMAGE_TAG: ${{ github.event.client_payload.image_tag }}
+        run: |
+          ssh -i ~/.ssh/opspilot.pem \
+            "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
+            "sudo kubectl set image deployment/opspilot \
+             opspilot=${{ secrets.DOCKERHUB_USER }}/opspilot:${IMAGE_TAG} && \
+             sudo kubectl rollout status deployment/opspilot --timeout=120s"
