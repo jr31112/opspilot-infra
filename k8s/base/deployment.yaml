@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: opspilot
-          image: jr31112/opspilot/opspilot:latest
+          image: jr31112/opspilot:latest
           ports:
             - containerPort: 8080
 
