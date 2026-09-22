@@ -1,5 +1,7 @@
 prometheus:
   prometheusSpec:
+    nodeSelector:
+      workload: monitoring
     retention: 3d
     resources:
       requests:
