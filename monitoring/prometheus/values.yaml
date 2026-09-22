@@ -10,6 +10,8 @@ prometheus:
         memory: 512Mi
 
 grafana:
+  nodeSelector:
+    workload: monitoring
   resources:
     requests:
       cpu: 50m
