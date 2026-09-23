@@ -16,6 +16,22 @@ prometheusOperator:
     workload: monitoring
 
 grafana:
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 3000
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: web
+    hosts: []
+    path: /monitor
+    pathType: Prefix
+  grafana.ini:
+    server:
+      root_url: /monitor/
+      serve_from_sub_path: true
   nodeSelector:
     workload: monitoring
   resources:
