@@ -27,13 +27,13 @@ jobs:
         run: |
           ssh -i ~/.ssh/opspilot.pem \
             "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
-            "cd /opspilot_infra && git pull"
+            "cd /opspilot-infra && git pull"
 
       - name: Apply Kubernetes manifests
         run: |
           ssh -i ~/.ssh/opspilot.pem \
             "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
-            "cd /opspilot_infra && sudo kubectl apply -f k8s/base/deployment.yaml"
+            "cd /opspilot-infra && sudo kubectl apply -f k8s/base/deployment.yaml"
 
       - name: Update image
         env:
