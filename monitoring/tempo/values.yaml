@@ -1,0 +1,16 @@
+tempo:
+  reportingEnabled: false
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 512Mi
+
+nodeSelector:
+  workload: monitoring
+
+persistence:
+  enabled: false
