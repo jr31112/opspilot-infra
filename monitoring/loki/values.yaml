@@ -1,7 +1,10 @@
+# 단일 인스턴스 배포
 deploymentMode: SingleBinary
 
 loki:
   auth_enabled: false
+  # 테스트용 스키마 사용
+  useTestSchema: true
 
   commonConfig:
     replication_factor: 1
@@ -23,6 +26,7 @@ singleBinary:
       cpu: 300m
       memory: 512Mi
 
+# 분산 배포 컴포넌트 비활성화
 backend:
   replicas: 0
 
@@ -31,3 +35,10 @@ read:
 
 write:
   replicas: 0
+
+# 캐시 컴포넌트 비활성화
+chunksCache:
+  enabled: false
+
+resultsCache:
+  enabled: false
