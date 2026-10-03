@@ -12,6 +12,15 @@ spec:
       labels:
         app: opspilot
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: workload
+                    operator: NotIn
+                    values:
+                      - monitoring
       containers:
         - name: opspilot
           image: jr31112/opspilot:latest
