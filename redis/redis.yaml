@@ -95,21 +95,37 @@ spec:
       labels:
         app: redis-sentinel
     spec:
+      initContainers:
+        - name: copy-config
+          image: redis:7.4-alpine
+          command:
+            - sh
+            - -c
+            - cp /config/sentinel.conf /data/sentinel.conf
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: sentinel-data
+              mountPath: /data
+
       containers:
         - name: sentinel
           image: redis:7.4-alpine
           command:
             - redis-sentinel
-            - /etc/redis/sentinel.conf
+            - /data/sentinel.conf
           ports:
             - containerPort: 26379
           volumeMounts:
-            - name: config
-              mountPath: /etc/redis
+            - name: sentinel-data
+              mountPath: /data
+
       volumes:
         - name: config
           configMap:
             name: redis-sentinel-config
+        - name: sentinel-data
+          emptyDir: {}
 
 ---
 apiVersion: v1
